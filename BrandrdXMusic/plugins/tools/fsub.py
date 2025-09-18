@@ -8,20 +8,25 @@ from config import MONGO_DB_URI
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import (
     ChatAdminRequired,
-    InviteRequestSent,
-    UserAlreadyParticipant,
     UserNotParticipant,
 )
 
 fsubdb = MongoClient(MONGO_DB_URI)
 forcesub_collection = fsubdb.status_db.status
 
+
+# ------------------ SET FORCE SUB ------------------
 @app.on_message(filters.command(["fsub", "forcesub"]) & filters.group)
 async def set_forcesub(client: Client, message: Message):
     chat_id = message.chat.id
-    user_id = message.from_user.id
 
+    # ✅ prevent crash if message.from_user is None (anon admin, service msg, forwarded msg)
+    if not message.from_user:
+        return
+
+    user_id = message.from_user.id
     member = await client.get_chat_member(chat_id, user_id)
+
     if not (member.status == "creator" or user_id in SUDOERS):
         return await message.reply_text("**ᴏɴʟʏ ɢʀᴏᴜᴘ ᴏᴡɴᴇʀs ᴏʀ sᴜᴅᴏᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.**")
 
@@ -62,7 +67,6 @@ async def set_forcesub(client: Client, message: Message):
                     [[InlineKeyboardButton("๏ ᴀᴅᴅ ᴍᴇ ɪɴ ᴄʜᴀɴɴᴇʟ ๏", url=f"https://t.me/{app.username}?startchannel=s&admin=invite_users+manage_video_chats")]]
                 )
             )
-            
 
         forcesub_collection.update_one(
             {"chat_id": chat_id},
@@ -87,7 +91,7 @@ async def set_forcesub(client: Client, message: Message):
         )
         await asyncio.sleep(1)
 
-    except Exception as e:
+    except Exception:
         await message.reply_photo(
             photo="https://envs.sh/TnZ.jpg",
             caption=("**🚫 I'ᴍ ɴᴏᴛ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜɪs ᴄʜᴀɴɴᴇʟ.**\n\n"
@@ -100,16 +104,23 @@ async def set_forcesub(client: Client, message: Message):
         )
         await asyncio.sleep(1)
 
+
+# ------------------ CLOSE BUTTON ------------------
 @app.on_callback_query(filters.regex("close_force_sub"))
 async def close_force_sub(client: Client, callback_query: CallbackQuery):
     await callback_query.answer("ᴄʟᴏsᴇᴅ!")
     await callback_query.message.delete()
-    
 
+
+# ------------------ FORCE SUB CHECK ------------------
 async def check_forcesub(client: Client, message: Message):
     chat_id = message.chat.id
-    user_id = message.from_user.id
 
+    # ✅ prevent crash
+    if not message.from_user:
+        return
+
+    user_id = message.from_user.id
     forcesub_data = forcesub_collection.find_one({"chat_id": chat_id})
     if not forcesub_data:
         return
@@ -128,19 +139,26 @@ async def check_forcesub(client: Client, message: Message):
         else:
             invite_link = await app.export_chat_invite_link(channel_id)
             channel_url = invite_link
+
         await message.reply_photo(
             photo="https://files.catbox.moe/2vz5yz.jpg",
-            caption=(f"**👋 ʜᴇʟʟᴏ {message.from_user.mention},**\n\n**ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ᴊᴏɪɴ ᴛʜᴇ [ᴄʜᴀɴɴᴇʟ]({channel_url}) ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ.**"),
+            caption=(f"**👋 ʜᴇʟʟᴏ {message.from_user.mention},**\n\n"
+                     f"**ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ᴊᴏɪɴ ᴛʜᴇ [ᴄʜᴀɴɴᴇʟ]({channel_url}) ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇs ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ.**"),
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("๏ ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ ๏", url=channel_url)]]),
         )
         await asyncio.sleep(1)
+
     except ChatAdminRequired:
         forcesub_collection.delete_one({"chat_id": chat_id})
         return await message.reply_text("**🚫 I'ᴍ ɴᴏ ʟᴏɴɢᴇʀ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ғᴏʀᴄᴇᴅ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ᴄʜᴀɴɴᴇʟ. ғᴏʀᴄᴇ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ʜᴀs ʙᴇᴇɴ ᴅɪsᴀʙʟᴇᴅ.**")
 
 
+# ------------------ ENFORCE CHECK ------------------
 @app.on_message(filters.group, group=30)
 async def enforce_forcesub(client: Client, message: Message):
+    # ✅ skip if no sender (anon, system msg)
+    if not message.from_user:
+        return
     if not await check_forcesub(client, message):
         return
 
