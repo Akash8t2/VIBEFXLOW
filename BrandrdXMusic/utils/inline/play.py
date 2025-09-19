@@ -232,10 +232,10 @@ def stream_markup2(_, chat_id):
         ],
 [
             InlineKeyboardButton(
-                text="🥀 ᴏᴡɴᴇʀ 🥀", url=f"https://t.me/Vip_chor"
+                text="🥀 ᴏᴡɴᴇʀ 🥀", url=f"https://t.me/botcasx"
             ),
             InlineKeyboardButton(
-                text="🥀 ᴄʜᴀᴛ 🥀", url=f"https://t.me/+SFB9vAp52SAxZGE1"
+                text="🥀 ᴄʜᴀᴛ 🥀", url=f"https://t.me/BeatXFlowSupport"
             ),
         ],
 
