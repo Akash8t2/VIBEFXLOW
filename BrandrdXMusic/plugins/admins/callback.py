@@ -22,9 +22,7 @@ from BrandrdXMusic.utils.formatters import seconds_to_min
 from BrandrdXMusic.utils.inline import (
     close_markup,
     stream_markup,
-    stream_markup2, 
     stream_markup_timer,
-    stream_markup_timer2,
 )
 from BrandrdXMusic.utils.stream.autoclear import auto_clean
 from BrandrdXMusic.utils.thumbnails import get_thumb
