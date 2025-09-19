@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20
+FROM python:3.10-slim-bullseye
 
 # Update package lists and install ffmpeg
 RUN apt-get update \
