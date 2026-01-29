@@ -76,7 +76,7 @@ def aq_markup(_, chat_id):
                 text="⛦ 𝗢𝗪𝗡𝗘𝗥  ⛦", url=f"https://t.me/botcasx"
             ),
             InlineKeyboardButton(
-                text="🥀 𝗦𝗨𝗣𝗣𝗢𝗥𝗧 🥀", url=f"https://t.me/BeatXFlowSupport"
+                text="🥀 𝗦𝗨𝗣𝗣𝗢𝗥𝗧 🥀", url=f"https://t.me/CYBER_OTP1_CORE"
             ),
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
@@ -113,7 +113,7 @@ def queuemarkup(_, vidid, chat_id):
         [
             InlineKeyboardButton(
                 text="๏ ᴍᴏʀᴇ ๏",
-                url="https://t.me/BeatXFlowSupport",
+                url="https://t.me/CYBER_OTP1_CORE",
             ),
         ],
     ]
