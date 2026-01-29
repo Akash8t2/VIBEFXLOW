@@ -18,12 +18,12 @@ async def start(client: Client, message: Message):
                 text="—͟͟͞͞𝗔𝗞𝗔𝗦𝗛 🥀", url=f"https://t.me/botcasx"
             ),
             InlineKeyboardButton(
-                text="˹𝐁ᴇᴀᴛꭙ 𝐅ʟᴏᴡ™ ˼ | Support", url=f"https://t.me/BeatXFlowSupport"
+                text="𝗖𝗬𝗕𝗘𝗥 𝗖𝗢𝗥𝗘 𝗖𝗛𝗔𝗧", url=f"https://t.me/CYBER_OTP1_CORE"
             ),
         ],
                 [
             InlineKeyboardButton(
-                text="˹𝐁ᴇᴀᴛꭙ 𝐅ʟᴏᴡ™ ˼ | 𝐔𝐩𝐝𝐚𝐭𝐞𝐬", url=f"https://t.me/BeatFlowCommunity"
+                text="𝗖𝗬𝗕𝗘𝗥 𝗢𝗧𝗣 𝗖𝗢𝗥𝗘 • 𝗨𝗣𝗗𝗔𝗧𝗘𝗦", url=f"https://t.me/CyberOTPCore"
             ),
                 ],
                 [
